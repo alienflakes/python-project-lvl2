@@ -13,5 +13,6 @@ package-install:
 lint:
 	poetry run flake8 gendiff
 
+.PHONY: gendiff
 gendiff:
 	poetry run gendiff
