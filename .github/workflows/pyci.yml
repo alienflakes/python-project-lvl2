@@ -29,4 +29,5 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: 7e0f367abd35de7c57df664fc439e701e1ed735601e6a11f2fb139a45430ae8c
         with:
+          coverageCommand: coverage run -m pytest --cov=gendiff tests/
           debug: true
