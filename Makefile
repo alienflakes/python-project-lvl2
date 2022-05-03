@@ -19,3 +19,13 @@ test:
 .PHONY: gendiff
 gendiff:
 	poetry run gendiff
+
+test-coverage:
+	coverage run -m pytest --cov=gendiff tests/ --cov-report xml
+
+selfcheck:
+	poetry check
+
+check: selfcheck test lint
+
+.PHONY: install test lint selfcheck check build
