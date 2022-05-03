@@ -6,7 +6,7 @@ from gendiff.gendiff import generate_diff
 def test_gendiff():
 
     assert generate_diff(
-        '/home/phelix/codish/hexlet/gendiff_project/tests/fixtures/file1.json',
+        'tests/fixtures/file1.json',
         'tests/fixtures/file2.json'
     ) == """{
   - follow: false
