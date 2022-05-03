@@ -1,6 +1,7 @@
 [![Actions Status](https://github.com/alienflakes/python-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/alienflakes/python-project-lvl2/actions)
+[![PythonCI](https://github.com/alienflakes/python-project-lvl2/actions/workflows/pyci.yml/badge.svg)](https://github.com/alienflakes/python-project-lvl2/actions/workflows/pyci.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/658a428e127cda054892/maintainability)](https://codeclimate.com/github/alienflakes/python-project-lvl2/maintainability)
-[![tests and linter](https://github.com/alienflakes/python-project-lvl2/actions/workflows/tests_and_linter.yml/badge.svg)](https://github.com/alienflakes/python-project-lvl2/actions/workflows/tests_and_linter.yml)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/658a428e127cda054892/test_coverage)](https://codeclimate.com/github/alienflakes/python-project-lvl2/test_coverage)
 
 ## *gendiff*
 CLI utility for generating differences between two given files.
