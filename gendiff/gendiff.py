@@ -3,26 +3,40 @@ import json
 from os.path import abspath, isabs
 
 
-def visualize(diffs_lst):
+def visualize(diffs):
     """
     Construct a visual representation of files' diff.
-
-    Uses a tuple of each diff, containing:
-    [0]: name of changed parameter
-    [1]: value of changed parameter
-    [2]: symbol representing the change
+    1. Creates lists of data pairs and their status symbol.
+    2. Sorts lists by name of the pair.
+    3. Sets up formatted lines.
+    4. Constructs the visual output.
 
     Args:
-        diffs_lst: list of tuples
+        diffs: dict of diff by status, which can be:
+        added, removed, same, changed_from_file1, changed_from_file2
 
     Returns:
         formatted string of diffs
 
     """
+    symbol_added = '+'
+    symbol_removed = '-'
+    symbol_same = ' '
+
     lines = []
-    for each in diffs_lst:
-        name, value, symbol = each
-        lines.append('  {0} {1}: {2}'.format(symbol, name, value))
+    for key, value in diffs.items():
+        for each in value:
+            name, data = each
+            symbol = symbol_same
+            if key == 'added' or key == 'changed_from_file2':
+                symbol = symbol_added
+            elif key == 'removed' or key == 'changed_from_file1':
+                symbol = symbol_removed
+            lines.append('  {0} {1}: {2}'.format(symbol, name, data))
+
+    first_letter_index = 4
+    lines.sort(key=lambda line: line[first_letter_index])
+
     joined = '\n'.join(lines)
     return '{0}\n{1}\n{2}'.format('{', joined, '}')
 
@@ -69,40 +83,39 @@ def generate_diff(file_path1, file_path2):
     lowercase_bool(data_dct1)
     lowercase_bool(data_dct2)
 
-    symbol_added = '+'
-    symbol_removed = '-'
-    symbol_same = ' '
+    all_diffs = {
+        'added': [],
+        'removed': [],
+        'same': [],
+        'changed_from_file1': [],
+        'changed_from_file2': []
+    }
 
     added_keys = list(data_dct2.keys() - data_dct1.keys())
     removed_keys = list(data_dct1.keys() - data_dct2.keys())
-    added = [
-        (key, data_dct2[key], symbol_added)
+    all_diffs['added'] = [
+        [key, data_dct2[key]]
         for key in added_keys
     ]
-    removed = [
-        (key, data_dct1[key], symbol_removed)
+    all_diffs['removed'] = [
+        [key, data_dct1[key]]
         for key in removed_keys
     ]
-    unchanged = list(data_dct1.keys() & data_dct2.keys())
 
-    same = []
-    changed_file1 = []
-    changed_file2 = []
-
-    for key in unchanged:
+    both = list(data_dct1.keys() & data_dct2.keys())
+    for key in both:
         value1 = data_dct1[key]
         value2 = data_dct2[key]
         if value1 == value2:
-            same.append((key, value1, symbol_same))
+            all_diffs['same'].append(
+                [key, value1]
+            )
         else:
-            changed_file1.append(
-                (key, value1, symbol_removed),
+            all_diffs['changed_from_file1'].append(
+                [key, value1],
             )
-            changed_file2.append(
-                (key, value2, symbol_added),
+            all_diffs['changed_from_file2'].append(
+                [key, value2],
             )
-
-    all_diffs = added + removed + same + changed_file1 + changed_file2
-    all_diffs.sort(key=lambda name: name[0])
 
     return visualize(all_diffs)
