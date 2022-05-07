@@ -12,11 +12,10 @@ def visualize(diffs):
     4. Constructs the visual output.
 
     Args:
-        diffs: dict of diff by status, which can be:
-        added, removed, same, changed_from_file1, changed_from_file2
+        diffs: dict of diff with key=status
 
     Returns:
-        formatted string of diffs
+        formatted string
 
     """
     symbol_added = '+'
@@ -37,27 +36,29 @@ def visualize(diffs):
     first_letter_index = 4
     lines.sort(key=lambda line: line[first_letter_index])
 
-    joined = '\n'.join(lines)
-    return '{0}\n{1}\n{2}'.format('{', joined, '}')
+    return '{0}\n{1}\n{2}'.format('{', '\n'.join(lines), '}')
 
 
-def lowercase_bool(_dict):
+def lowercase_bool(item):
     """
-    Replace Python bool with json-style bool as string, if found in dict.
-
-    Modifies dict in-place.
+    Change Python bool to json-style lowercase string,
+    if item is boolean type. If not, change nothing.
 
     Args:
-        _dict: dict
+        item: a value from the diff dictionary
+
+    Returns:
+        lowercase string of corresponding bool value
+        or the same item if it's not bool.
 
     """
-    for k, v in _dict.items():
-        if v is True:
-            _dict[k] = 'true'
-        if v is False:
-            _dict[k] = 'false'
-        if v is None:
-            _dict[k] = 'none'
+    if item is True:
+        return 'true'
+    if item is False:
+        return 'false'
+    if item is None:
+        return 'none'
+    return item
 
 
 def generate_diff(file_path1, file_path2):
@@ -69,7 +70,7 @@ def generate_diff(file_path1, file_path2):
         file_path2: path to second file.
 
     Returns:
-        formatted string.
+        formatted string of diff
 
     """
     if not isabs(file_path1):
@@ -79,9 +80,6 @@ def generate_diff(file_path1, file_path2):
 
     data_dct1 = json.load(open(file_path1))
     data_dct2 = json.load(open(file_path2))
-
-    lowercase_bool(data_dct1)
-    lowercase_bool(data_dct2)
 
     all_diffs = {
         'added': [],
@@ -94,18 +92,18 @@ def generate_diff(file_path1, file_path2):
     added_keys = list(data_dct2.keys() - data_dct1.keys())
     removed_keys = list(data_dct1.keys() - data_dct2.keys())
     all_diffs['added'] = [
-        [key, data_dct2[key]]
+        [key, lowercase_bool(data_dct2[key])]
         for key in added_keys
     ]
     all_diffs['removed'] = [
-        [key, data_dct1[key]]
+        [key, lowercase_bool(data_dct1[key])]
         for key in removed_keys
     ]
 
     both = list(data_dct1.keys() & data_dct2.keys())
     for key in both:
-        value1 = data_dct1[key]
-        value2 = data_dct2[key]
+        value1 = lowercase_bool(data_dct1[key])
+        value2 = lowercase_bool(data_dct2[key])
         if value1 == value2:
             all_diffs['same'].append(
                 [key, value1]
