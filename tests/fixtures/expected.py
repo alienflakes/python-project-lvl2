@@ -1,4 +1,4 @@
-"""Expected results for gendiff tests."""
+"""Expected results for tests."""
 
 
 result_flat = """{
@@ -29,3 +29,16 @@ result_same = """{
     timeout: 20
     verbose: true
 }"""
+
+test_dict1 = {
+  "host": "hexlet.io",
+  "timeout": 50,
+  "proxy": "123.234.53.22",
+  "follow": False
+}
+
+test_dict2 = {
+  "timeout": 20,
+  "verbose": True,
+  "host": "hexlet.io"
+}

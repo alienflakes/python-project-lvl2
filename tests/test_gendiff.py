@@ -1,4 +1,4 @@
-"""Testing gendiff."""
+"""Testing gendiff.py."""
 
 from gendiff import generate_diff
 from .fixtures import expected
@@ -16,7 +16,7 @@ def test_generate_diff():
     assert generate_diff(
         'tests/fixtures/file2.json',
         'tests/fixtures/file2.json'
-    )
+    ) == expected.result_same
     assert generate_diff(
         'tests/fixtures/file1.json',
         'tests/fixtures/file2.json'
