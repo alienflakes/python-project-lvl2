@@ -1,8 +1,33 @@
 """Compare files and generate diff.."""
 
 import json
+import yaml
 import os
 from .parsing import parse_diff
+
+
+def get_data_from_file(file_path):
+    """
+    Extract a Python object from JSON or YAML file.
+    Args:
+        file_path: path to file
+
+    Returns:
+        python object
+    """
+    if not os.path.isabs(file_path):
+        file_path = os.path.abspath(file_path)
+
+    extension = os.path.splitext(file_path)[1]
+    data = {}
+
+    if extension == '.json':
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+    elif extension == '.yaml' or '.yml':
+        with open(file_path, 'r') as file:
+            data = yaml.safe_load(file)
+    return data
 
 
 def generate_diff(file_path1, file_path2):
@@ -17,12 +42,8 @@ def generate_diff(file_path1, file_path2):
         formatted string of diff
 
     """
-    if not os.path.isabs(file_path1):
-        file_path1 = os.path.abspath(file_path1)
-    if not os.path.isabs(file_path2):
-        file_path2 = os.path.abspath(file_path2)
 
-    data1 = json.load(open(file_path1))
-    data2 = json.load(open(file_path2))
+    data1 = get_data_from_file(file_path1)
+    data2 = get_data_from_file(file_path2)
 
     return parse_diff(data1, data2)
