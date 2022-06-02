@@ -9,6 +9,7 @@ def jsonize_bool(item):
     return item
 
 
+#  **NOT READY FOR NESTED DIFF, works only at flat diff for now**
 def stylish(diffs):
     """
     Construct a visual representation of files' diff.

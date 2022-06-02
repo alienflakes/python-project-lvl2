@@ -3,42 +3,98 @@
 
 def parse_diff(dct1, dct2):
     """
-    Find diff between two dictionaries.
 
     Args:
         dct1: first dict
         dct2: second dict
 
     Returns:
-        diff dict
+        sorted list of dicts
     """
 
-    all_diffs = {
-        'added': {},
-        'removed': {},
-        'same': {},
-        'changed_from_file1': {},
-        'changed_from_file2': {}
-    }
+    all_diff = []
 
-    added_keys = list(dct2.keys() - dct1.keys())
-    removed_keys = list(dct1.keys() - dct2.keys())
+    all_diff.extend([
+        {
+            'name': added_key,
+            'value': dct2[added_key],
+            'status': 'added',
+            'children': None
+        }
+        for added_key in list(dct2.keys() - dct1.keys())
+    ])
 
-    all_diffs['added'].update(
-        {key: dct2[key] for key in added_keys}
-    )
-    all_diffs['removed'].update(
-        {key: dct1[key] for key in removed_keys}
-    )
+    all_diff.extend([
+        {
+            'name': removed_key,
+            'value': dct1[removed_key],
+            'status': 'removed',
+            'children': None
+        }
+        for removed_key in list(dct1.keys() - dct2.keys())
+    ])
 
-    both = list(dct1.keys() & dct2.keys())
-    for key in both:
-        value1 = dct1[key]
-        value2 = dct2[key]
-        if value1 == value2:
-            all_diffs['same'][key] = value1
+    for same_key in list(dct1.keys() & dct2.keys()):
+        data1 = dct1[same_key]
+        data2 = dct2[same_key]
+
+        if type(data1) is dict and type(data2) is dict:
+            all_diff.append(
+                {
+                    'name': same_key,
+                    'value': None,
+                    'status': 'same',
+                    'children': parse_diff(data1, data2)
+                }
+            )
+            continue
+        elif type(data1) is dict:
+            all_diff.append(
+                {
+                    'name': same_key,
+                    'value': data1,
+                    'status': 'changed_from_file1',
+                    'children': None
+                }
+            )
+            continue
+        elif type(data2) is dict:
+            all_diff.append(
+                {
+                    'name': same_key,
+                    'value': data2,
+                    'status': 'changed_from_file2',
+                    'children': None
+                }
+            )
+            continue
+
         else:
-            all_diffs['changed_from_file1'][key] = value1
-            all_diffs['changed_from_file2'][key] = value2
+            if data1 == data2:
+                all_diff.append(
+                    {
+                        'name': same_key,
+                        'value': data1,
+                        'status': 'same',
+                        'children': None
+                    }
+                )
+            else:
+                all_diff.append(
+                    {
+                        'name': same_key,
+                        'value': data1,
+                        'status': 'changed_from_file1',
+                        'children': None
+                    }
+                )
+                all_diff.append(
+                    {
+                        'name': same_key,
+                        'value': data2,
+                        'status': 'changed_from_file2',
+                        'children': None
+                    }
+                )
 
-    return all_diffs
+    return sorted(all_diff, key=lambda x: x['name'])
