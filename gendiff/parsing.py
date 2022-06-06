@@ -12,25 +12,28 @@ def parse_diff(dct1, dct2):
         sorted list of dicts
     """
 
+    def make_template(name, value, status, children=None):
+        return {
+            'name': name,
+            'value': value,
+            'status': status,
+            'children': children
+        }
+
     all_diff = []
 
     all_diff.extend([
-        {
-            'name': added_key,
-            'value': dct2[added_key],
-            'status': 'added',
-            'children': None
-        }
+        make_template(
+            name=added_key, value=dct2[added_key],
+            status='added'
+        )
         for added_key in list(dct2.keys() - dct1.keys())
     ])
-
     all_diff.extend([
-        {
-            'name': removed_key,
-            'value': dct1[removed_key],
-            'status': 'removed',
-            'children': None
-        }
+        make_template(
+            name=removed_key, value=dct1[removed_key],
+            status='removed'
+        )
         for removed_key in list(dct1.keys() - dct2.keys())
     ])
 
@@ -38,63 +41,33 @@ def parse_diff(dct1, dct2):
         data1 = dct1[same_key]
         data2 = dct2[same_key]
 
-        if type(data1) is dict and type(data2) is dict:
+        if isinstance(data1, dict) and isinstance(data2, dict):
             all_diff.append(
-                {
-                    'name': same_key,
-                    'value': None,
-                    'status': 'same',
-                    'children': parse_diff(data1, data2)
-                }
+                make_template(
+                    name=same_key, value=None,
+                    status='same', children=parse_diff(data1, data2)
+                )
             )
-            continue
-        elif type(data1) is dict:
-            all_diff.append(
-                {
-                    'name': same_key,
-                    'value': data1,
-                    'status': 'changed_from_file1',
-                    'children': None
-                }
-            )
-            continue
-        elif type(data2) is dict:
-            all_diff.append(
-                {
-                    'name': same_key,
-                    'value': data2,
-                    'status': 'changed_from_file2',
-                    'children': None
-                }
-            )
-            continue
-
         else:
             if data1 == data2:
                 all_diff.append(
-                    {
-                        'name': same_key,
-                        'value': data1,
-                        'status': 'same',
-                        'children': None
-                    }
+                    make_template(
+                        name=same_key, value=data1,
+                        status='same'
+                    )
                 )
             else:
                 all_diff.append(
-                    {
-                        'name': same_key,
-                        'value': data1,
-                        'status': 'changed_from_file1',
-                        'children': None
-                    }
+                    make_template(
+                        name=same_key, value=data1,
+                        status='changed_from_file1'
+                    )
                 )
                 all_diff.append(
-                    {
-                        'name': same_key,
-                        'value': data2,
-                        'status': 'changed_from_file2',
-                        'children': None
-                    }
+                    make_template(
+                        name=same_key, value=data2,
+                        status='changed_from_file2'
+                    )
                 )
 
-    return sorted(all_diff, key=lambda x: x['name'])
+    return sorted(all_diff, key=lambda diff: diff['name'])
