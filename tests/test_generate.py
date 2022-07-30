@@ -1,6 +1,6 @@
 """Testing generate.py."""
 
-from gendiff.generate import generate_diff
+from gendiff import generate_diff
 from .fixtures import expected
 
 

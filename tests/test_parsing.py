@@ -1,6 +1,6 @@
 """Testing parsing.py."""
 
-from gendiff.parsing import parse_diff
+from gendiff import parse_diff   # noqa: F401
 from .fixtures import fixture, expected
 
 
