@@ -31,14 +31,14 @@ def get_data_from_file(file_path):
     return data
 
 
-def generate_diff(file_path1, file_path2, formatter='stylish'):
+def generate_diff(file_path1, file_path2, formatter=stylish):
     """
     Generate diff between two files.
 
     Args:
         file_path1: path to first file.
         file_path2: path to second file.
-        formatter: format of result representation
+        formatter: format of resulted representation
 
     Returns:
         formatted string of diff
@@ -48,5 +48,4 @@ def generate_diff(file_path1, file_path2, formatter='stylish'):
     data1 = get_data_from_file(file_path1)
     data2 = get_data_from_file(file_path2)
 
-    if formatter == 'stylish':
-        return stylish(parse_diff(data1, data2))
+    return formatter(parse_diff(data1, data2))
