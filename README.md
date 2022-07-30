@@ -13,3 +13,5 @@ My [second project](https://ru.hexlet.io/programs/python/projects/50) for [Hexle
 [![asciicast](https://asciinema.org/a/j1Dk8B6oHPuhvgofHPn1nE5LC.svg)](https://asciinema.org/a/j1Dk8B6oHPuhvgofHPn1nE5LC)
 #### Comparing two flat YAML/YML files:
 [![asciicast](https://asciinema.org/a/QReTb3jHfrMKJpnqdTxNABx7c.svg)](https://asciinema.org/a/QReTb3jHfrMKJpnqdTxNABx7c)
+#### Comparing two nested JSON files:
+[![asciicast](https://asciinema.org/a/TDh3bBk18QugrENd7iTkBCijy.svg)](https://asciinema.org/a/TDh3bBk18QugrENd7iTkBCijy)
