@@ -1,45 +1,75 @@
 """Gendiff formatters."""
 
+import itertools
 import json
 
 
-def jsonize_bool(item):
-    if type(item) is bool or None:
+SYMBOLS = {
+    'added': '+',
+    'removed': '-',
+    'same': ' ',
+    'changed_from_file1': '-',
+    'changed_from_file2': '+',
+    'new': ' '
+}
+
+
+def jsonize(item):
+    if isinstance(item, bool) or item is None:
         return json.dumps(item)
     return item
 
 
-#  **NOT READY FOR NESTED DIFF, works only at flat diff for now**
-def stylish(diffs):
-    """
-    Construct a visual representation of files' diff.
+def render(data):
+    if not isinstance(data, dict):
+        return jsonize(data)
 
-    Args:
-        diffs: dict
+    result = {}
+    for key, value in sorted(data.items()):
+        if not isinstance(value, dict):
+            first_part = f"{SYMBOLS['new']} {key}"
+            result[first_part] = jsonize(value)
+            continue
+        status = value.get('status', 'new')
+        if status == 'changed':
+            first_part_from_file1 = f"{SYMBOLS['changed_from_file1']} {key}"
+            result[first_part_from_file1] = render(value['old_value'])
+            first_part_from_file2 = f"{SYMBOLS['changed_from_file2']} {key}"
+            result[first_part_from_file2] = render(value['new_value'])
+            continue
+        first_part = f"{SYMBOLS[status]} {key}"
+        if value.get('children'):
+            result[first_part] = render(value['children'])
+            continue
+        if status == 'added' or status == 'same':
+            result[first_part] = render(value['new_value'])
+        elif status == 'removed':
+            result[first_part] = render(value['old_value'])
+        else:
+            result[first_part] = render(value)
 
-    Returns:
-        formatted string
+    return result
 
-    """
 
-    symbols = {
-        'added': '+',
-        'removed': '-',
-        'same': ' ',
-        'changed_from_file1': '-',
-        'changed_from_file2': '+'
-    }
+def stylish(diff):
 
-    lines = []
+    replacer = '  '
+    spaces_count = 1
 
-    for key, value in diffs.items():
-        for name, data in value.items():
-            symbol = symbols[key]
+    def walk(current_value, depth):
+        if not isinstance(current_value, dict):
+            return jsonize(current_value)
+
+        deep_indent_size = depth + spaces_count
+        deep_indent = replacer * deep_indent_size
+        current_indent = replacer * depth
+        lines = []
+        for first_part, second_part in current_value.items():
             lines.append(
-                '  {0} {1}: {2}'.format(symbol, name, jsonize_bool(data))
+                f'{deep_indent}{first_part}: '
+                f'{walk(second_part, deep_indent_size + 1)}'
             )
+        result = itertools.chain("{", lines, [current_indent + "}"])
+        return '\n'.join(result)
 
-    first_letter_index = 4
-    lines.sort(key=lambda line: line[first_letter_index])
-
-    return '{0}\n{1}\n{2}'.format('{', '\n'.join(lines), '}')
+    return walk(render(diff), 0)
