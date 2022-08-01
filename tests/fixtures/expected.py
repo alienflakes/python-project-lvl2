@@ -4,40 +4,35 @@
 result_parsing_flat = {
     'verbose': {
         'status': 'added',
-        'old_value': None,
-        'new_value': True,
+        'value': True,
+        'changed_value': None,
         'children': None},
     'follow': {
         'status': 'removed',
-        'old_value': False,
-        'new_value': None,
-        'children': None
-    },
+        'value': False,
+        'changed_value': None,
+        'children': None},
     'proxy': {
         'status': 'removed',
-        'old_value': '123.234.53.22',
-        'new_value': None,
-        'children': None
-    },
-    'host': {
-        'status': 'same',
-        'old_value': 'hexlet.io',
-        'new_value': 'hexlet.io',
-        'children': None
-    },
+        'value': '123.234.53.22',
+        'changed_value': None,
+        'children': None},
     'timeout': {
         'status': 'changed',
-        'old_value': 50,
-        'new_value': 20,
-        'children': None
-    }
+        'value': 50,
+        'changed_value': 20,
+        'children': None},
+    'host': {
+        'status': 'same',
+        'value': 'hexlet.io',
+        'changed_value': None,
+        'children': None}
 }
 
 result_parsing_nested = {
     'group3': {
         'status': 'added',
-        'old_value': None,
-        'new_value': {
+        'value': {
             'deep': {
                 'id': {
                     'number': 45
@@ -45,119 +40,116 @@ result_parsing_nested = {
             },
             'fee': 100500
         },
+        'changed_value': None,
         'children': None
     },
     'group2': {
         'status': 'removed',
-        'old_value': {
+        'value': {
             'abc': 12345,
             'deep': {
                 'id': 45
             }
         },
-        'new_value': None,
+        'changed_value': None,
         'children': None
     },
-    'common': {
+    'group1': {
         'status': 'same',
-        'old_value': None,
-        'new_value': None,
+        'value': None,
+        'changed_value': None,
         'children': {
-            'setting5': {
-                'status': 'added',
-                'old_value': None,
-                'new_value': {
-                    'key5': 'value5'
-                },
-                'children': None
-            },
-            'follow': {
-                'status': 'added',
-                'old_value': None,
-                'new_value': False,
-                'children': None
-            },
-            'setting4': {
-                'status': 'added',
-                'old_value': None,
-                'new_value': 'blah blah',
-                'children': None
-            },
-            'setting2': {
-                'status': 'removed',
-                'old_value': 200,
-                'new_value': None,
-                'children': None
-            },
-            'setting6': {
-                'status': 'same',
-                'old_value': None,
-                'new_value': None,
-                'children': {
-                    'ops': {
-                        'status': 'added',
-                        'old_value': None,
-                        'new_value': 'vops',
-                        'children': None
-                    },
-                    'doge': {
-                        'status': 'same',
-                        'old_value': None,
-                        'new_value': None,
-                        'children': {
-                            'wow': {
-                                'status': 'changed',
-                                'old_value': '',
-                                'new_value': 'so much',
-                                'children': None
-                            }
-                        }
-                    },
-                    'key': {
-                        'status': 'same',
-                        'old_value': 'value',
-                        'new_value': 'value',
-                        'children': None
-                    }
-                }
-            },
-            'setting1': {
-                'status': 'same',
-                'old_value': 'Value 1',
-                'new_value': 'Value 1',
-                'children': None
-            },
-            'setting3': {
+            'baz': {
                 'status': 'changed',
-                'old_value': True,
-                'new_value': None,
+                'value': 'bas',
+                'changed_value': 'bars',
+                'children': None},
+            'nest': {
+                'status': 'changed',
+                'value': {'key': 'value'},
+                'changed_value': 'str',
+                'children': None},
+            'foo': {
+                'status': 'same',
+                'value': 'bar',
+                'changed_value': None,
                 'children': None
             }
         }
     },
-    'group1': {
+    'common': {
         'status': 'same',
-        'old_value': None,
-        'new_value': None,
+        'value': None,
+        'changed_value': None,
         'children': {
-            'foo': {
-                'status': 'same',
-                'old_value': 'bar',
-                'new_value': 'bar',
-                'children': None
-            },
-            'baz': {
-                'status': 'changed',
-                'old_value': 'bas',
-                'new_value': 'bars',
-                'children': None
-            },
-            'nest': {
-                'status': 'changed',
-                'old_value': {
-                    'key': 'value'
+            'setting5': {
+                'status': 'added',
+                'value': {
+                    'key5': 'value5'
                 },
-                'new_value': 'str',
+                'changed_value': None,
+                'children': None
+            },
+            'follow': {
+                'status': 'added',
+                'value': False,
+                'changed_value': None,
+                'children': None
+            },
+            'setting4': {
+                'status': 'added',
+                'value': 'blah blah',
+                'changed_value': None,
+                'children': None
+            },
+            'setting2': {
+                'status': 'removed',
+                'value': 200,
+                'changed_value': None,
+                'children': None
+            },
+            'setting6': {
+                'status': 'same',
+                'value': None,
+                'changed_value': None,
+                'children': {
+                    'ops': {
+                        'status': 'added',
+                        'value': 'vops',
+                        'changed_value': None,
+                        'children': None
+                    },
+                    'key': {
+                        'status': 'same',
+                        'value': 'value',
+                        'changed_value': None,
+                        'children': None
+                    },
+                    'doge': {
+                        'status': 'same',
+                        'value': None,
+                        'changed_value': None,
+                        'children': {
+                            'wow': {
+                                'status': 'changed',
+                                'value': '',
+                                'changed_value': 'so much',
+                                'children': None
+                            }
+                        }
+                    }
+                }
+            },
+            'setting3': {
+                'status': 'changed',
+                'value': True,
+                'changed_value': None,
+                'children': None
+            },
+            'setting1': {
+                'status': 'same',
+                'value': 'Value 1',
+                'changed_value': None,
                 'children': None
             }
         }
@@ -271,4 +263,3 @@ result_stylish_nested = """{
         fee: 100500
     }
 }"""
-
