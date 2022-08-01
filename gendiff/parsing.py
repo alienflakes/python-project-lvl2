@@ -12,11 +12,11 @@ def parse_diff(dct1, dct2):
         sorted list of dicts
     """
 
-    def make_template(status, old_value, new_value, children=None):
+    def make_template(status, value, changed_value=None, children=None):
         return {
             'status': status,
-            'old_value': old_value,
-            'new_value': new_value,
+            'value': value,
+            'changed_value': changed_value,
             'children': children
         }
 
@@ -25,8 +25,8 @@ def parse_diff(dct1, dct2):
     all_diff.update(
         {
             added_key: make_template(
-                old_value=None, new_value=dct2[added_key],
-                status='added'
+                status='added',
+                value=dct2[added_key]
             )
             for added_key in list(dct2.keys() - dct1.keys())
         }
@@ -35,8 +35,8 @@ def parse_diff(dct1, dct2):
     all_diff.update(
         {
             removed_key: make_template(
-                old_value=dct1[removed_key], new_value=None,
-                status='removed'
+                status='removed',
+                value=dct1[removed_key]
             )
             for removed_key in list(dct1.keys() - dct2.keys())
         }
@@ -49,8 +49,9 @@ def parse_diff(dct1, dct2):
         if isinstance(data1, dict) and isinstance(data2, dict):
             all_diff.update(
                 {same_key: make_template(
-                    old_value=None, new_value=None,
-                    status='same', children=parse_diff(data1, data2)
+                    status='same',
+                    value=None,
+                    children=parse_diff(data1, data2)
                 )
                 }
             )
@@ -58,16 +59,16 @@ def parse_diff(dct1, dct2):
             if data1 == data2:
                 all_diff.update(
                     {same_key: make_template(
-                        old_value=data1, new_value=data2,
-                        status='same'
+                        status='same',
+                        value=data1
                     )
                     }
                 )
             else:
                 all_diff.update(
                     {same_key: make_template(
-                        old_value=data1, new_value=data2,
-                        status='changed'
+                        status='changed',
+                        value=data1, changed_value=data2
                     )
                     }
                 )

@@ -8,8 +8,6 @@ SYMBOLS = {
     'added': '+',
     'removed': '-',
     'same': ' ',
-    'changed_from_file1': '-',
-    'changed_from_file2': '+',
     'new': ' '
 }
 
@@ -32,21 +30,16 @@ def render(data):
             continue
         status = value.get('status', 'new')
         if status == 'changed':
-            first_part_from_file1 = f"{SYMBOLS['changed_from_file1']} {key}"
-            result[first_part_from_file1] = render(value['old_value'])
-            first_part_from_file2 = f"{SYMBOLS['changed_from_file2']} {key}"
-            result[first_part_from_file2] = render(value['new_value'])
+            first_part_removed = f"{SYMBOLS['removed']} {key}"
+            result[first_part_removed] = render(value['value'])
+            first_part_added = f"{SYMBOLS['added']} {key}"
+            result[first_part_added] = render(value['changed_value'])
             continue
         first_part = f"{SYMBOLS[status]} {key}"
         if value.get('children'):
             result[first_part] = render(value['children'])
-            continue
-        if status == 'added' or status == 'same':
-            result[first_part] = render(value['new_value'])
-        elif status == 'removed':
-            result[first_part] = render(value['old_value'])
         else:
-            result[first_part] = render(value)
+            result[first_part] = render(value.get('value', value))
 
     return result
 
