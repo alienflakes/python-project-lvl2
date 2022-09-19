@@ -1,7 +1,6 @@
 """Gendiff formatters."""
 
 import itertools
-import json
 
 
 SYMBOLS = {
@@ -12,21 +11,15 @@ SYMBOLS = {
 }
 
 
-def jsonize(item):
-    if isinstance(item, bool) or item is None:
-        return json.dumps(item)
-    return item
-
-
 def render(data):
     if not isinstance(data, dict):
-        return jsonize(data)
+        return data
 
     result = {}
     for key, value in sorted(data.items()):
         if not isinstance(value, dict):
             first_part = f"{SYMBOLS['new']} {key}"
-            result[first_part] = jsonize(value)
+            result[first_part] = value
             continue
         status = value.get('status', 'new')
         if status == 'changed':
@@ -51,7 +44,7 @@ def stylish(diff):
 
     def walk(current_value, depth):
         if not isinstance(current_value, dict):
-            return jsonize(current_value)
+            return current_value
 
         deep_indent_size = depth + spaces_count
         deep_indent = replacer * deep_indent_size

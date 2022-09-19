@@ -4,12 +4,12 @@
 result_parsing_flat = {
     'verbose': {
         'status': 'added',
-        'value': True,
+        'value': 'true',
         'changed_value': None,
         'children': None},
     'follow': {
         'status': 'removed',
-        'value': False,
+        'value': 'false',
         'changed_value': None,
         'children': None},
     'proxy': {
@@ -92,7 +92,7 @@ result_parsing_nested = {
             },
             'follow': {
                 'status': 'added',
-                'value': False,
+                'value': 'false',
                 'changed_value': None,
                 'children': None
             },
@@ -142,8 +142,8 @@ result_parsing_nested = {
             },
             'setting3': {
                 'status': 'changed',
-                'value': True,
-                'changed_value': None,
+                'value': 'true',
+                'changed_value': 'null',
                 'children': None
             },
             'setting1': {

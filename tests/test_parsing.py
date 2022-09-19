@@ -1,7 +1,13 @@
 """Testing parsing.py."""
 
-from gendiff import parse_diff   # noqa: F401
+from gendiff import jsonize, parse_diff  # noqa: F401
 from .fixtures import fixture, expected
+
+
+def test_jsonize():
+    assert jsonize(True) == 'true'
+    assert jsonize(None) == 'null'
+    assert jsonize('none of those') == 'none of those'
 
 
 def test_parse_diff_flat():

@@ -1,4 +1,11 @@
 """Parsing diff module."""
+import json
+
+
+def jsonize(item):
+    if isinstance(item, bool) or item is None:
+        return json.dumps(item)
+    return item
 
 
 def parse_diff(dct1, dct2):
@@ -26,7 +33,7 @@ def parse_diff(dct1, dct2):
         {
             added_key: make_template(
                 status='added',
-                value=dct2[added_key]
+                value=jsonize(dct2[added_key])
             )
             for added_key in list(dct2.keys() - dct1.keys())
         }
@@ -36,7 +43,7 @@ def parse_diff(dct1, dct2):
         {
             removed_key: make_template(
                 status='removed',
-                value=dct1[removed_key]
+                value=jsonize(dct1[removed_key])
             )
             for removed_key in list(dct1.keys() - dct2.keys())
         }
@@ -60,7 +67,7 @@ def parse_diff(dct1, dct2):
                 all_diff.update(
                     {same_key: make_template(
                         status='same',
-                        value=data1
+                        value=jsonize(data1)
                     )
                     }
                 )
@@ -68,7 +75,7 @@ def parse_diff(dct1, dct2):
                 all_diff.update(
                     {same_key: make_template(
                         status='changed',
-                        value=data1, changed_value=data2
+                        value=jsonize(data1), changed_value=jsonize(data2)
                     )
                     }
                 )
