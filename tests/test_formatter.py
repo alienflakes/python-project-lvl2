@@ -2,13 +2,6 @@ from gendiff import stylish, render, jsonize  # noqa: F401
 from .fixtures import expected
 
 
-def test_jsonize():
-    assert jsonize(True) == 'true'
-    assert jsonize(None) == 'null'
-    assert jsonize('none of those') == 'none of those'
-    assert jsonize(89) == 89
-
-
 def test_render():
     assert render(
         expected.result_parsing_flat
