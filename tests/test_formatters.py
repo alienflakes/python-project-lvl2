@@ -1,5 +1,17 @@
-from gendiff.formatters import stylish, render, plain   # noqa: F401
+from gendiff.formatters import jsonize, stylish, render, plain, format_value   # noqa: F401
 from .fixtures import expected
+
+
+def test_jsonize():
+    assert jsonize(None) == 'null'
+    assert jsonize(False) == 'false'
+    assert jsonize('hello json') == 'hello json'
+
+
+def test_format_value():
+    assert format_value(True) == 'true'
+    assert format_value(50) == 50
+    assert format_value('some string') == "'some string'"
 
 
 def test_render():

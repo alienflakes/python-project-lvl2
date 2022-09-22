@@ -1,4 +1,5 @@
 import itertools
+import json
 
 
 SYMBOLS = {
@@ -9,15 +10,21 @@ SYMBOLS = {
 }
 
 
+def jsonize(item):
+    if isinstance(item, bool) or item is None:
+        return json.dumps(item)
+    return item
+
+
 def render(data):
     if not isinstance(data, dict):
-        return data
+        return jsonize(data)
 
     result = {}
     for key, value in sorted(data.items()):
         if not isinstance(value, dict):
             first_part = f"{SYMBOLS['new_inside']} {key}"
-            result[first_part] = value
+            result[first_part] = jsonize(value)
             continue
         status = value.get('status', 'new_inside')
         if status == 'changed':
