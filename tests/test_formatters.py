@@ -1,4 +1,4 @@
-from gendiff.formatters import stylish, render   # noqa: F401
+from gendiff.formatters import stylish, render, plain   # noqa: F401
 from .fixtures import expected
 
 
@@ -18,3 +18,7 @@ def test_stylish():
     assert stylish(
         expected.result_parsing_nested
     ) == expected.result_stylish_nested
+
+
+def test_plain():
+    assert plain(expected.result_parsing_flat) == expected.result_plain_flat

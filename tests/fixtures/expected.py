@@ -263,3 +263,17 @@ result_stylish_nested = """{
         fee: 100500
     }
 }"""
+
+""""{
+  - follow: false
+    host: hexlet.io
+  - proxy: 123.234.53.22
+  - timeout: 50
+  + timeout: 20
+  + verbose: true
+}"""
+
+result_plain_flat = """Property 'follow' was removed
+Property 'proxy' was removed
+Property 'timeout' was updated. From 50 to 20
+Property 'verbose' was added with value: true"""
