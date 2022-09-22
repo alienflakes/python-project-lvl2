@@ -5,7 +5,7 @@ SYMBOLS = {
     'added': '+',
     'removed': '-',
     'same': ' ',
-    'new': ' '
+    'new_inside': ' '
 }
 
 
@@ -16,10 +16,10 @@ def render(data):
     result = {}
     for key, value in sorted(data.items()):
         if not isinstance(value, dict):
-            first_part = f"{SYMBOLS['new']} {key}"
+            first_part = f"{SYMBOLS['new_inside']} {key}"
             result[first_part] = value
             continue
-        status = value.get('status', 'new')
+        status = value.get('status', 'new_inside')
         if status == 'changed':
             first_part_removed = f"{SYMBOLS['removed']} {key}"
             result[first_part_removed] = render(value['value'])
