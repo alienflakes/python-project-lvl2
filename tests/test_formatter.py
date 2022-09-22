@@ -1,4 +1,4 @@
-from gendiff import stylish, render  # noqa: F401
+from gendiff.formatters import stylish, render,   # noqa: F401
 from .fixtures import expected
 
 

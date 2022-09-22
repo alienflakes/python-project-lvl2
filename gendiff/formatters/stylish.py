@@ -1,5 +1,3 @@
-"""Gendiff formatters."""
-
 import itertools
 
 

@@ -4,7 +4,7 @@ import json
 import yaml
 import os
 from .parsing import parse_diff
-from .formatter import stylish
+from .formatters import stylish
 
 
 def get_data_from_file(file_path):
