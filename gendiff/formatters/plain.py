@@ -12,6 +12,8 @@ WORDING = {
 
 
 def format_value(subject):
+    if isinstance(subject, dict):
+        return WORDING['complex_value']
     if isinstance(subject, str):
         return f"'{subject}'"
     else:
@@ -29,16 +31,12 @@ def plain(source):
                 continue
             if params['status'] == 'same':
                 continue
-            if isinstance(params['value'], dict):
-                value = WORDING['complex_value']
-            else:
-                value = format_value(params['value'])
 
             first_part = WORDING['template'].format(
                 name=format_value('.'.join(path + [key]))
             )
             second_part = WORDING[params['status']].format(
-                val=value,
+                val=format_value(params['value']),
                 changed_val=format_value(params['changed_value'])
             )
             lines.append(first_part + second_part)
