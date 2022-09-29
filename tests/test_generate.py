@@ -24,3 +24,29 @@ def test_generate_diff_nested_stylish():
         'tests/fixtures/file1_nested.yaml',
         'tests/fixtures/file2_nested.yml'
     ) == expected.result_stylish_nested
+
+
+def test_generate_diff_plain():
+    assert generate_diff(
+        'tests/fixtures/file1_flat.json',
+        'tests/fixtures/file2_flat.json',
+        'plain'
+    ) == expected.result_plain_flat
+    assert generate_diff(
+        'tests/fixtures/file1_nested.json',
+        'tests/fixtures/file2_nested.json',
+        'plain'
+    ) == expected.result_plain_nested
+
+
+def test_generate_diff_json():
+    assert generate_diff(
+        'tests/fixtures/file1_flat.json',
+        'tests/fixtures/file2_flat.json',
+        'json'
+    ) == expected.result_json_flat
+    assert generate_diff(
+        'tests/fixtures/file1_nested.json',
+        'tests/fixtures/file2_nested.json',
+        'json'
+    ) == expected.result_json_nested
