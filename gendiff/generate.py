@@ -4,7 +4,7 @@ import json
 import yaml
 import os
 from .parsing import parse_diff
-from .formatters import stylish
+from .formatters import stylish, plain
 
 
 def get_data_from_file(file_path):
@@ -31,22 +31,14 @@ def get_data_from_file(file_path):
     return data
 
 
-def generate_diff(file_path1, file_path2, formatter='stylish'):
-    """
-    Generate diff between two files.
-
-    Args:
-        file_path1: path to first file.
-        file_path2: path to second file.
-        formatter: format of resulted representation
-
-    Returns:
-        formatted string of diff
-
-    """
+def generate_diff(file_path1, file_path2, format_name='stylish'):
 
     data1 = get_data_from_file(file_path1)
     data2 = get_data_from_file(file_path2)
 
-    if formatter == 'stylish':
-        return stylish(parse_diff(data1, data2))
+    if format_name == 'stylish':
+        formatter = stylish
+    if format_name == 'plain':
+        formatter = plain
+
+    return formatter(parse_diff(data1, data2))
