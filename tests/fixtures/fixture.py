@@ -66,7 +66,7 @@ fixture_nested_dict2 = {
     "group3": {
         "deep": {
             "id": {
-              "number": 45
+                "number": 45
             }
         },
         "fee": 100500
