@@ -24,4 +24,4 @@
 [![asciicast](https://asciinema.org/a/QVAnoVMBFwfAeTaHWDHQe4XJ6.svg)](https://asciinema.org/a/QVAnoVMBFwfAeTaHWDHQe4XJ6)
 
 #### JSON format option:
-[![asciicast](https://asciinema.org/a/7NoiLaOKOv1btT6Wc9m598GBk.svg)](https://asciinema.org/a/7NoiLaOKOv1btT6Wc9m598GBk)
+[![asciicast](https://asciinema.org/a/UAFM6zNB53tIWNvJ5AABmmbZn.svg)](https://asciinema.org/a/UAFM6zNB53tIWNvJ5AABmmbZn)
