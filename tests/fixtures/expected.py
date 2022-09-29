@@ -1,4 +1,5 @@
 """Expected results for tests."""
+# flake8: noqa
 
 
 result_parsing_flat = {
@@ -232,7 +233,7 @@ result_stylish_nested = """{
         }
         setting6: {
             doge: {
-              - wow:
+              - wow: 
               + wow: so much
             }
             key: value
