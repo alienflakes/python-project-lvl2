@@ -289,3 +289,167 @@ Property 'group1.baz' was updated. From 'bas' to 'bars'
 Property 'group1.nest' was updated. From [complex value] to 'str'
 Property 'group2' was removed
 Property 'group3' was added with value: [complex value]"""
+
+result_json_flat = """{
+  "verbose": {
+    "status": "added",
+    "value": true,
+    "changed_value": null,
+    "children": null
+  },
+  "follow": {
+    "status": "removed",
+    "value": false,
+    "changed_value": null,
+    "children": null
+  },
+  "proxy": {
+    "status": "removed",
+    "value": "123.234.53.22",
+    "changed_value": null,
+    "children": null
+  },
+  "timeout": {
+    "status": "changed",
+    "value": 50,
+    "changed_value": 20,
+    "children": null
+  },
+  "host": {
+    "status": "same",
+    "value": "hexlet.io",
+    "changed_value": null,
+    "children": null
+  }
+}"""
+
+result_json_nested = """{
+  "group3": {
+    "status": "added",
+    "value": {
+      "deep": {
+        "id": {
+          "number": 45
+        }
+      },
+      "fee": 100500
+    },
+    "changed_value": null,
+    "children": null
+  },
+  "group2": {
+    "status": "removed",
+    "value": {
+      "abc": 12345,
+      "deep": {
+        "id": 45
+      }
+    },
+    "changed_value": null,
+    "children": null
+  },
+  "group1": {
+    "status": "same",
+    "value": null,
+    "changed_value": null,
+    "children": {
+      "baz": {
+        "status": "changed",
+        "value": "bas",
+        "changed_value": "bars",
+        "children": null
+      },
+      "nest": {
+        "status": "changed",
+        "value": {
+          "key": "value"
+        },
+        "changed_value": "str",
+        "children": null
+      },
+      "foo": {
+        "status": "same",
+        "value": "bar",
+        "changed_value": null,
+        "children": null
+      }
+    }
+  },
+  "common": {
+    "status": "same",
+    "value": null,
+    "changed_value": null,
+    "children": {
+      "setting5": {
+        "status": "added",
+        "value": {
+          "key5": "value5"
+        },
+        "changed_value": null,
+        "children": null
+      },
+      "follow": {
+        "status": "added",
+        "value": false,
+        "changed_value": null,
+        "children": null
+      },
+      "setting4": {
+        "status": "added",
+        "value": "blah blah",
+        "changed_value": null,
+        "children": null
+      },
+      "setting2": {
+        "status": "removed",
+        "value": 200,
+        "changed_value": null,
+        "children": null
+      },
+      "setting6": {
+        "status": "same",
+        "value": null,
+        "changed_value": null,
+        "children": {
+          "ops": {
+            "status": "added",
+            "value": "vops",
+            "changed_value": null,
+            "children": null
+          },
+          "key": {
+            "status": "same",
+            "value": "value",
+            "changed_value": null,
+            "children": null
+          },
+          "doge": {
+            "status": "same",
+            "value": null,
+            "changed_value": null,
+            "children": {
+              "wow": {
+                "status": "changed",
+                "value": "",
+                "changed_value": "so much",
+                "children": null
+              }
+            }
+          }
+        }
+      },
+      "setting3": {
+        "status": "changed",
+        "value": true,
+        "changed_value": null,
+        "children": null
+      },
+      "setting1": {
+        "status": "same",
+        "value": "Value 1",
+        "changed_value": null,
+        "children": null
+      }
+    }
+  }
+}"""

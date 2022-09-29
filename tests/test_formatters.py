@@ -1,4 +1,4 @@
-from gendiff.formatters import jsonize, stylish, render, plain, format_value   # noqa: F401
+from gendiff.formatters import jsonize, stylish, render, plain, format_value, json_format   # noqa: F401
 from .fixtures import expected
 
 
@@ -39,3 +39,10 @@ def test_plain():
     assert plain(
         expected.result_parsing_nested
     ) == expected.result_plain_nested
+
+
+def test_json_format():
+    assert json_format(
+        expected.result_parsing_flat) == expected.result_json_flat
+    assert json_format(
+        expected.result_parsing_nested) == expected.result_json_nested

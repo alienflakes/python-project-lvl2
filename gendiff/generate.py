@@ -4,7 +4,7 @@ import json
 import yaml
 import os
 from .parsing import parse_diff
-from .formatters import stylish, plain
+from .formatters import stylish, plain, json_format
 
 
 def get_data_from_file(file_path):
@@ -40,5 +40,7 @@ def generate_diff(file_path1, file_path2, format_name='stylish'):
         formatter = stylish
     if format_name == 'plain':
         formatter = plain
+    if format_name == 'json':
+        formatter = json_format
 
     return formatter(parse_diff(data1, data2))
