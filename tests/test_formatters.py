@@ -33,4 +33,9 @@ def test_stylish():
 
 
 def test_plain():
-    assert plain(expected.result_parsing_flat) == expected.result_plain_flat
+    assert plain(
+        expected.result_parsing_flat
+    ) == expected.result_plain_flat
+    assert plain(
+        expected.result_parsing_nested
+    ) == expected.result_plain_nested

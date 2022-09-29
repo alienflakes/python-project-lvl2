@@ -1,12 +1,13 @@
+from itertools import chain
 from .stylish import jsonize
 
 
 WORDING = {
     'template': "Property {name} was ",
-    'added': "added with value: {value}",
+    'added': "added with value: {val}",
     'removed': "removed",
-    'changed': "updated. From {value} to {changed_value}",
-    'complex_value': "[complex_value]"
+    'changed': "updated. From {val} to {changed_val}",
+    'complex_value': "[complex value]"
 }
 
 
@@ -17,16 +18,31 @@ def format_value(subject):
         return jsonize(subject)
 
 
-def plain(data):
+def plain(source):
     lines = []
-    for key, params in sorted(data.items()):
-        if params['status'] == 'same':
-            continue
-        first_part = WORDING['template'].format(name=format_value(key))
-        second_part = WORDING[params['status']].format(
-            value=format_value(params['value']),
-            changed_value=format_value(params['changed_value'])
-        )
-        lines.append(first_part + second_part)
 
-    return '\n'.join(lines)
+    def walk(data, path):
+
+        for key, params in sorted(data.items()):
+            if params['children']:
+                walk(params['children'], list(chain(path, [key])))
+                continue
+            if params['status'] == 'same':
+                continue
+            if isinstance(params['value'], dict):
+                value = WORDING['complex_value']
+            else:
+                value = format_value(params['value'])
+
+            first_part = WORDING['template'].format(
+                name=format_value('.'.join(path + [key]))
+            )
+            second_part = WORDING[params['status']].format(
+                val=value,
+                changed_val=format_value(params['changed_value'])
+            )
+            lines.append(first_part + second_part)
+
+        return '\n'.join(lines)
+
+    return walk(source, [])
