@@ -3,6 +3,12 @@ name = "hexlet-code"
 version = "0.1.0"
 description = "gendiff - second project of Hexlet Python Course"
 authors = ["phelix alienflakes <alienflakes38@gmail.com>"]
+repository = "https://github.com/alienflakes/python-project-lvl2"
+classifiers = [
+    "Programming Language :: Python :: 3.8",
+    "Topic :: Terminals",
+    "Intended Audience :: Education"
+]
 packages = [
   { include = "gendiff" },
 ]
