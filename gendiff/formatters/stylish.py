@@ -6,35 +6,38 @@ SYMBOLS = {
     'added': '+',
     'removed': '-',
     'same': ' ',
-    'new_inside': ' '
+    'nested': ' ',
+    'new_inside_nested': ' '
 }
 
 
 def jsonize(item):
+    """Return JSON representation of a Python object."""
     if isinstance(item, bool) or item is None:
         return json.dumps(item)
     return item
 
 
-def render(data):
+def render(data: dict) -> dict:
+    """Build a tree of string parts for Stylish output."""
     if not isinstance(data, dict):
         return jsonize(data)
 
     result = {}
-    for key, value in sorted(data.items()):
+    for key, value in data.items():
         if not isinstance(value, dict):
-            first_part = f"{SYMBOLS['new_inside']} {key}"
+            first_part = f"{SYMBOLS['new_inside_nested']} {key}"
             result[first_part] = jsonize(value)
             continue
-        status = value.get('status', 'new_inside')
-        if status == 'changed':
+        node_type = value.get('node_type', 'new_inside_nested')
+        if node_type == 'updated':
             first_part_removed = f"{SYMBOLS['removed']} {key}"
             result[first_part_removed] = render(value['value'])
             first_part_added = f"{SYMBOLS['added']} {key}"
             result[first_part_added] = render(value['changed_value'])
             continue
-        first_part = f"{SYMBOLS[status]} {key}"
-        if value.get('children'):
+        first_part = f"{SYMBOLS[node_type]} {key}"
+        if node_type == 'nested':
             result[first_part] = render(value['children'])
         else:
             result[first_part] = render(value.get('value', value))
@@ -42,7 +45,8 @@ def render(data):
     return result
 
 
-def stylish(diff):
+def stylish(diff: dict) -> str:
+    """Construct Stylish output from tree of strings."""
 
     replacer = '  '
     spaces_count = 1

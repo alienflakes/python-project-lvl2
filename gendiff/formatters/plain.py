@@ -6,12 +6,13 @@ WORDING = {
     'template': "Property {name} was ",
     'added': "added with value: {val}",
     'removed': "removed",
-    'changed': "updated. From {val} to {changed_val}",
+    'updated': "updated. From {val} to {changed_val}",
     'complex_value': "[complex value]"
 }
 
 
 def format_value(subject):
+    """Return formatted values for Plain output."""
     if isinstance(subject, dict):
         return WORDING['complex_value']
     if isinstance(subject, str):
@@ -20,22 +21,23 @@ def format_value(subject):
         return jsonize(subject)
 
 
-def plain(source):
+def plain(source: dict) -> str:
+    """Build Plain output."""
     lines = []
 
     def walk(data, path):
 
-        for key, params in sorted(data.items()):
-            if params['children']:
+        for key, params in data.items():
+            if params['node_type'] == 'nested':
                 walk(params['children'], list(chain(path, [key])))
                 continue
-            if params['status'] == 'same':
+            if params['node_type'] == 'same':
                 continue
 
             first_part = WORDING['template'].format(
                 name=format_value('.'.join(path + [key]))
             )
-            second_part = WORDING[params['status']].format(
+            second_part = WORDING[params['node_type']].format(
                 val=format_value(params['value']),
                 changed_val=format_value(params['changed_value'])
             )
