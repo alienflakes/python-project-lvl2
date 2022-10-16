@@ -1,40 +1,18 @@
-"""Compare files and generate diff.."""
-
-import json
-import yaml
-import os
-from .parsing import parse_diff
+from .diff_tree import build_diff
+from .parser import parse
+from .extract import read_file, get_extension
 from .formatters import stylish, plain, json_format
 
 
-def get_data_from_file(file_path):
-    """
-    Extract a Python object from JSON or YAML file.
-    Args:
-        file_path: path to file
+def generate_diff(
+        first_path: str, second_path: str, format_name='stylish') -> str:
+    """Generate stylized output of diff between two files."""
 
-    Returns:
-        python object
-    """
-    if not os.path.isabs(file_path):
-        file_path = os.path.abspath(file_path)
+    file1 = read_file(first_path)
+    file2 = read_file(second_path)
 
-    extension = os.path.splitext(file_path)[1]
-    data = {}
-
-    if extension == '.json':
-        with open(file_path, 'r') as file:
-            data = json.load(file)
-    elif extension == '.yaml' or '.yml':
-        with open(file_path, 'r') as file:
-            data = yaml.safe_load(file)
-    return data
-
-
-def generate_diff(file_path1, file_path2, format_name='stylish'):
-
-    data1 = get_data_from_file(file_path1)
-    data2 = get_data_from_file(file_path2)
+    data1 = parse(file1, get_extension(first_path))
+    data2 = parse(file2, get_extension(second_path))
 
     if format_name == 'stylish':
         formatter = stylish
@@ -43,4 +21,4 @@ def generate_diff(file_path1, file_path2, format_name='stylish'):
     if format_name == 'json':
         formatter = json_format
 
-    return formatter(parse_diff(data1, data2))
+    return formatter(build_diff(data1, data2))
