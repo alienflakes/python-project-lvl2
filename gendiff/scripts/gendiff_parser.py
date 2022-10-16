@@ -1,12 +1,11 @@
 #!/usr/bin/env python
-"""CLI utility that generates diff in given files."""
-
 import argparse
 from gendiff import generate_diff
 
 
-def gendiff():
-    """Gendiff Parser."""
+def parse_arguments():
+    """Parse arguments for gendiff parser."""
+
     parser = argparse.ArgumentParser(
         prog='gendiff',
         description='Compares two configuration files and shows a difference.',
@@ -17,14 +16,19 @@ def gendiff():
                         default='stylish', help='set format of output')
 
     args = parser.parse_args()
+    return args
 
+
+def gendiff():
+    """CLI for generating stylized diff between two files."""
+
+    args = parse_arguments()
     result = generate_diff(args.first_file, args.second_file, args.format)
 
     print(result)
 
 
 def main():
-    """Run Gendiff."""
     gendiff()
 
 
