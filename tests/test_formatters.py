@@ -1,48 +1,76 @@
-from gendiff.formatters import jsonize, stylish, render, plain, format_value, json_format   # noqa: F401
-from .fixtures import expected
+import pytest
+from gendiff.formatters import jsonize, render, stylish, plain, format_value, json_format
+from .fixtures.expected.formatters import render_result
+from .fixtures.expected import parsing_result
+from gendiff import read_file
 
 
-def test_jsonize():
-    assert jsonize(None) == 'null'
-    assert jsonize(False) == 'false'
-    assert jsonize('hello json') == 'hello json'
+@pytest.mark.parametrize("test_input, result", [
+    (None, 'null'),
+    (False, 'false'),
+    ('hello json', 'hello json')
+])
+def test_jsonize(test_input, result):
+    assert jsonize(test_input) == result
 
 
-def test_format_value():
-    assert format_value(True) == 'true'
-    assert format_value(50) == 50
-    assert format_value('some string') == "'some string'"
+@pytest.mark.parametrize("test_input, result", [
+    (True, 'true'),
+    (50, 50),
+    ('some string', "'some string'")
+])
+def test_format_value(test_input, result):
+    assert format_value(test_input) == result
 
 
-def test_render():
-    assert render(
-        expected.result_parsing_flat
-    ) == expected.result_render_flat
-    assert render(
-        expected.result_parsing_nested
-    ) == expected.result_render_nested
+flat_input = parsing_result.flat
+nested_input = parsing_result.nested
 
 
-def test_stylish():
-    assert stylish(
-        expected.result_parsing_flat
-    ) == expected.result_stylish_flat
-    assert stylish(
-        expected.result_parsing_nested
-    ) == expected.result_stylish_nested
+@pytest.mark.parametrize("test_input, result", [
+    (flat_input, render_result.flat),
+    (nested_input, render_result.nested)
+])
+def test_render(test_input, result):
+    assert render(test_input) == result
 
 
-def test_plain():
-    assert plain(
-        expected.result_parsing_flat
-    ) == expected.result_plain_flat
-    assert plain(
-        expected.result_parsing_nested
-    ) == expected.result_plain_nested
+def read_from_filepath(filepath):
+    with open(filepath) as file:
+        return file.read()
 
 
-def test_json_format():
-    assert json_format(
-        expected.result_parsing_flat) == expected.result_json_flat
-    assert json_format(
-        expected.result_parsing_nested) == expected.result_json_nested
+stylish_flat = read_file('tests/fixtures/expected/formatters/stylish_flat.txt')
+stylish_nested = read_file('tests/fixtures/expected/formatters/stylish_nested.txt')
+
+
+@pytest.mark.parametrize("test_input, result", [
+    (flat_input, stylish_flat),
+    (nested_input, stylish_nested)
+])
+def test_stylish(test_input, result):
+    assert stylish(test_input) == result
+
+
+plain_flat = read_file('tests/fixtures/expected/formatters/plain_flat.txt')
+plain_nested = read_file('tests/fixtures/expected/formatters/plain_nested.txt')
+
+
+@pytest.mark.parametrize("test_input, result", [
+    (flat_input, plain_flat),
+    (nested_input, plain_nested)
+])
+def test_plain(test_input, result):
+    assert plain(test_input) == result
+
+
+json_format_flat = read_file('tests/fixtures/expected/formatters/json_format_flat.txt')
+json_format_nested = read_file('tests/fixtures/expected/formatters/json_format_nested.txt')
+
+
+@pytest.mark.parametrize("test_input, result", [
+    (flat_input, json_format_flat),
+    (nested_input, json_format_nested)
+])
+def test_json_format(test_input, result):
+    assert json_format(test_input) == result

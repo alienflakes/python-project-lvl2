@@ -1,52 +1,18 @@
-"""Testing generate.py."""
+import pytest
+from gendiff import generate_diff, read_file
 
-from gendiff import generate_diff
-from .fixtures import expected
-
-
-def test_generate_diff_flat_stylish():
-    assert generate_diff(
-        'tests/fixtures/file1_flat.json',
-        'tests/fixtures/file2_flat.json'
-    ) == expected.result_stylish_flat
-    assert generate_diff(
-        'tests/fixtures/file1_flat.yaml',
-        'tests/fixtures/file2_flat.yml'
-    ) == expected.result_stylish_flat
+nested_json1 = 'tests/fixtures/files/json/nested_file1.json'
+nested_json2 = 'tests/fixtures/files/json/nested_file2.json'
+nested_yaml1 = 'tests/fixtures/files/yaml/nested_file1.yaml'
+nested_yaml2 = 'tests/fixtures/files/yaml/nested_file2.yml'
+stylish_nested = read_file('tests/fixtures/expected/formatters/stylish_nested.txt')
+plain_nested = read_file('tests/fixtures/expected/formatters/plain_nested.txt')
 
 
-def test_generate_diff_nested_stylish():
-    assert generate_diff(
-        'tests/fixtures/file1_nested.json',
-        'tests/fixtures/file2_nested.json'
-    ) == expected.result_stylish_nested
-    assert generate_diff(
-        'tests/fixtures/file1_nested.yaml',
-        'tests/fixtures/file2_nested.yml'
-    ) == expected.result_stylish_nested
-
-
-def test_generate_diff_plain():
-    assert generate_diff(
-        'tests/fixtures/file1_flat.json',
-        'tests/fixtures/file2_flat.json',
-        'plain'
-    ) == expected.result_plain_flat
-    assert generate_diff(
-        'tests/fixtures/file1_nested.json',
-        'tests/fixtures/file2_nested.json',
-        'plain'
-    ) == expected.result_plain_nested
-
-
-def test_generate_diff_json():
-    assert generate_diff(
-        'tests/fixtures/file1_flat.json',
-        'tests/fixtures/file2_flat.json',
-        'json'
-    ) == expected.result_json_flat
-    assert generate_diff(
-        'tests/fixtures/file1_nested.json',
-        'tests/fixtures/file2_nested.json',
-        'json'
-    ) == expected.result_json_nested
+@pytest.mark.parametrize("dict1, dict2, formatter, result", [
+    (nested_json1, nested_json2, 'stylish', stylish_nested),
+    (nested_json1, nested_json2, 'plain', plain_nested),
+    (nested_yaml1, nested_yaml2, 'plain', plain_nested)
+])
+def test_generate_diff(dict1, dict2, formatter, result):
+    assert generate_diff(dict1, dict2, formatter) == result

@@ -1,20 +1,17 @@
-"""Fixtures for tests."""
-
-
-fixture_flat_dict1 = {
+flat_dict1 = {
     "host": "hexlet.io",
     "timeout": 50,
     "proxy": "123.234.53.22",
     "follow": False
 }
 
-fixture_flat_dict2 = {
+flat_dict2 = {
     "timeout": 20,
     "verbose": True,
     "host": "hexlet.io"
 }
 
-fixture_nested_dict1 = {
+nested_dict1 = {
     "common": {
         "setting1": "Value 1",
         "setting2": 200,
@@ -41,7 +38,7 @@ fixture_nested_dict1 = {
     }
 }
 
-fixture_nested_dict2 = {
+nested_dict2 = {
     "common": {
         "follow": False,
         "setting1": "Value 1",

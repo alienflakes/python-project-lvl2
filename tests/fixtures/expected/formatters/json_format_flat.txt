@@ -1,0 +1,32 @@
+{
+    "follow": {
+        "node_type": "removed",
+        "value": false,
+        "changed_value": null,
+        "children": null
+    },
+    "host": {
+        "node_type": "same",
+        "value": "hexlet.io",
+        "changed_value": null,
+        "children": null
+    },
+    "proxy": {
+        "node_type": "removed",
+        "value": "123.234.53.22",
+        "changed_value": null,
+        "children": null
+    },
+    "timeout": {
+        "node_type": "updated",
+        "value": 50,
+        "changed_value": 20,
+        "children": null
+    },
+    "verbose": {
+        "node_type": "added",
+        "value": true,
+        "changed_value": null,
+        "children": null
+    }
+}

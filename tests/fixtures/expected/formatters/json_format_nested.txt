@@ -1,0 +1,130 @@
+{
+    "common": {
+        "node_type": "nested",
+        "value": null,
+        "changed_value": null,
+        "children": {
+            "follow": {
+                "node_type": "added",
+                "value": false,
+                "changed_value": null,
+                "children": null
+            },
+            "setting1": {
+                "node_type": "same",
+                "value": "Value 1",
+                "changed_value": null,
+                "children": null
+            },
+            "setting2": {
+                "node_type": "removed",
+                "value": 200,
+                "changed_value": null,
+                "children": null
+            },
+            "setting3": {
+                "node_type": "updated",
+                "value": true,
+                "changed_value": null,
+                "children": null
+            },
+            "setting4": {
+                "node_type": "added",
+                "value": "blah blah",
+                "changed_value": null,
+                "children": null
+            },
+            "setting5": {
+                "node_type": "added",
+                "value": {
+                    "key5": "value5"
+                },
+                "changed_value": null,
+                "children": null
+            },
+            "setting6": {
+                "node_type": "nested",
+                "value": null,
+                "changed_value": null,
+                "children": {
+                    "doge": {
+                        "node_type": "nested",
+                        "value": null,
+                        "changed_value": null,
+                        "children": {
+                            "wow": {
+                                "node_type": "updated",
+                                "value": "",
+                                "changed_value": "so much",
+                                "children": null
+                            }
+                        }
+                    },
+                    "key": {
+                        "node_type": "same",
+                        "value": "value",
+                        "changed_value": null,
+                        "children": null
+                    },
+                    "ops": {
+                        "node_type": "added",
+                        "value": "vops",
+                        "changed_value": null,
+                        "children": null
+                    }
+                }
+            }
+        }
+    },
+    "group1": {
+        "node_type": "nested",
+        "value": null,
+        "changed_value": null,
+        "children": {
+            "baz": {
+                "node_type": "updated",
+                "value": "bas",
+                "changed_value": "bars",
+                "children": null
+            },
+            "foo": {
+                "node_type": "same",
+                "value": "bar",
+                "changed_value": null,
+                "children": null
+            },
+            "nest": {
+                "node_type": "updated",
+                "value": {
+                    "key": "value"
+                },
+                "changed_value": "str",
+                "children": null
+            }
+        }
+    },
+    "group2": {
+        "node_type": "removed",
+        "value": {
+            "abc": 12345,
+            "deep": {
+                "id": 45
+            }
+        },
+        "changed_value": null,
+        "children": null
+    },
+    "group3": {
+        "node_type": "added",
+        "value": {
+            "deep": {
+                "id": {
+                    "number": 45
+                }
+            },
+            "fee": 100500
+        },
+        "changed_value": null,
+        "children": null
+    }
+}
