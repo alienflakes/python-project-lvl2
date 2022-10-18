@@ -1,7 +1,7 @@
 from .diff_tree import build_diff
 from .parser import parse
 from .extract import read_file, get_extension
-from .formatters import stylish, plain, json_format
+from .formatters import choose_formatter
 
 
 def generate_diff(
@@ -14,11 +14,6 @@ def generate_diff(
     data1 = parse(file1, get_extension(first_path))
     data2 = parse(file2, get_extension(second_path))
 
-    if format_name == 'stylish':
-        formatter = stylish
-    if format_name == 'plain':
-        formatter = plain
-    if format_name == 'json':
-        formatter = json_format
+    formatter = choose_formatter(format_name)
 
     return formatter(build_diff(data1, data2))
