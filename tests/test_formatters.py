@@ -1,7 +1,7 @@
 import pytest
 from gendiff.formatters import jsonize, render, stylish, plain, format_value, json_format
 from .fixtures.expected.formatters import render_result
-from .fixtures.expected import parsing_result
+from .fixtures.expected import diff_tree_result
 from gendiff import read_file
 
 
@@ -23,8 +23,8 @@ def test_format_value(test_input, result):
     assert format_value(test_input) == result
 
 
-flat_input = parsing_result.flat
-nested_input = parsing_result.nested
+flat_input = diff_tree_result.flat
+nested_input = diff_tree_result.nested
 
 
 @pytest.mark.parametrize("test_input, result", [
