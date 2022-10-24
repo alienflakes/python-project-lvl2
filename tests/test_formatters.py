@@ -1,6 +1,5 @@
 import pytest
-from gendiff.formatters import jsonize, render, stylish, plain, format_value, json_format
-from .fixtures.expected.formatters import render_result
+from gendiff.formatters import jsonize, stylish, plain, format_value, json_format
 from .fixtures.expected import diff_tree_result
 from gendiff import read_file
 
@@ -25,14 +24,6 @@ def test_format_value(test_input, result):
 
 flat_input = diff_tree_result.flat
 nested_input = diff_tree_result.nested
-
-
-@pytest.mark.parametrize("test_input, result", [
-    (flat_input, render_result.flat),
-    (nested_input, render_result.nested)
-])
-def test_render(test_input, result):
-    assert render(test_input) == result
 
 
 def read_from_filepath(filepath):
