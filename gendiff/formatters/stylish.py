@@ -6,8 +6,7 @@ SYMBOLS = {
     'added': '+',
     'removed': '-',
     'same': ' ',
-    'nested': ' ',
-    'new_inside_nested': ' '
+    'nested': ' '
 }
 
 
@@ -18,53 +17,94 @@ def jsonize(item):
     return item
 
 
-def render(data: dict) -> dict:
-    """Build a tree of string parts for Stylish output."""
-    if not isinstance(data, dict):
-        return jsonize(data)
-
-    result = {}
-    for key, value in data.items():
-        if not isinstance(value, dict):
-            first_part = f"{SYMBOLS['new_inside_nested']} {key}"
-            result[first_part] = jsonize(value)
-            continue
-        node_type = value.get('node_type', 'new_inside_nested')
-        if node_type == 'updated':
-            first_part_removed = f"{SYMBOLS['removed']} {key}"
-            result[first_part_removed] = render(value['value'])
-            first_part_added = f"{SYMBOLS['added']} {key}"
-            result[first_part_added] = render(value['changed_value'])
-            continue
-        first_part = f"{SYMBOLS[node_type]} {key}"
-        if node_type == 'nested':
-            result[first_part] = render(value['children'])
-        else:
-            result[first_part] = render(value.get('value', value))
-
-    return result
+def build_line(indent: str, key: str, value, replacer: str = '') -> str:
+    """Return formatted line of Stylish diff representation."""
+    return f'{indent}{replacer}{key}: {value}'
 
 
-def stylish(diff: dict) -> str:
-    """Construct Stylish output from tree of strings."""
+def stringify_value(value, depth: int = 0) -> str:
+    """Format node's value."""
+    if not isinstance(value, dict):
+        return jsonize(value)
 
-    replacer = '  '
-    spaces_count = 1
+    indent = ' ' * 4
+    lines = []
 
-    def walk(current_value, depth):
-        if not isinstance(current_value, dict):
-            return current_value
-
-        deep_indent_size = depth + spaces_count
-        deep_indent = replacer * deep_indent_size
-        current_indent = replacer * depth
-        lines = []
-        for first_part, second_part in current_value.items():
-            lines.append(
-                f'{deep_indent}{first_part}: '
-                f'{walk(second_part, deep_indent_size + 1)}'
+    for k, v in value.items():
+        lines.append(
+            build_line(
+                indent=indent * (depth + 1), key=k,
+                value=stringify_value(v, depth + 1)
             )
-        result = itertools.chain("{", lines, [current_indent + "}"])
-        return '\n'.join(result)
+        )
 
-    return walk(render(diff), 0)
+    result = itertools.chain('{', lines, [(indent * depth) + '}'])
+    return '\n'.join(result)
+
+
+def stringify_node(key: str, node: dict, depth: int) -> str:
+    """Format nodes with their values."""
+
+    def replacer_by_type(_symbol):
+        return f'  {_symbol} '
+
+    indent = ' ' * 4
+    current_indent = indent * depth
+
+    lines = []
+    node_type = node['node_type']
+
+    if node_type == 'updated':
+        lines.append(
+            build_line(
+                indent=current_indent, key=key,
+                value=stringify_value(node['value'], depth + 1),
+                replacer=replacer_by_type(SYMBOLS['removed'])
+            )
+        )
+        lines.append(
+            build_line(
+                indent=current_indent, key=key,
+                value=stringify_value(node['changed_value'], depth + 1),
+                replacer=replacer_by_type(SYMBOLS['added'])
+            )
+        )
+        return '\n'.join(lines)
+
+    symbol = SYMBOLS[node_type]
+    replacer_with_symbol = replacer_by_type(symbol)
+
+    if node_type == 'nested':
+        nested_lines = [
+            stringify_node(key, value, depth + 1)
+            for key, value in node['children'].items()
+        ]
+        result = itertools.chain(
+            '{', nested_lines, [indent * (depth + 1) + '}']
+        )
+        value = '\n'.join(result)
+        lines.append(
+            build_line(
+                indent=current_indent, key=key,
+                value=value,
+                replacer=replacer_with_symbol
+            )
+        )
+    else:
+        value = stringify_value(node['value'], depth + 1)
+        lines.append(
+            build_line(
+                indent=current_indent, key=key,
+                value=value,
+                replacer=replacer_with_symbol
+            )
+        )
+
+    return '\n'.join(lines)
+
+
+def stylish(data: dict) -> str:
+    """Return formatted diff in Stylish representation."""
+    lines = [stringify_node(key, value, 0) for key, value in data.items()]
+    result = itertools.chain('{', lines, '}')
+    return '\n'.join(result)
